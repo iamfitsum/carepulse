@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import appConfig from "@/lib/appConfig";
 
 const fontSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -11,8 +12,8 @@ const fontSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "CarePulse",
-  description: "A healthcare management system",
+  title: appConfig.appName,
+  description: appConfig.description,
 };
 
 export default function RootLayout({
