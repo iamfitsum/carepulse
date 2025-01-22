@@ -7,6 +7,7 @@ const appConfig = {
   },
   images: {
     onboarding: "/assets/images/onboarding-img.png",
+    register: "/assets/images/register-img.png"
   },
   copyright: () => `© ${new Date().getFullYear()} CarePulse. All rights reserved.`,
 };
