@@ -1,12 +1,43 @@
-import React from 'react';
+import AppointmentForm from "@/components/forms/AppointmentForm";
+import { getPatient } from "@/lib/actions/patient.actions";
+import appConfig from "@/lib/appConfig";
+import Image from "next/image";
+import React from "react";
 
-type Props = {
-  
-};
-
-const NewAppointment: React.FC<Props> = ({}: Props) => {
+const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
+  const patient = await getPatient(userId);
   return (
-    <div>NewAppointment</div>
+    <div className="flex h-screen max-h-screen">
+      <section className="remove-scrollbar container my-auto">
+        <div className="sub-container max-w-[860px] flex-1 justify-between">
+          <Image
+            src={appConfig.logo.full}
+            height={1000}
+            width={1000}
+            alt="logo"
+            className="mb-12 h-10 w-fit"
+          />
+
+          <AppointmentForm
+            type="create"
+            userId={userId}
+            patientId={patient.$id}
+          />
+
+          <p className="justify-items-end text-dark-600 xl:text-left">
+            {appConfig.copyright()}
+          </p>
+        </div>
+      </section>
+
+      <Image
+        src={appConfig.images.appointment}
+        height={1000}
+        width={1000}
+        alt="appointment image"
+        className="side-img max-w-[390px] bg-bottom"
+      />
+    </div>
   );
 };
 
