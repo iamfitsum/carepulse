@@ -9,7 +9,12 @@ const appConfig = {
     onboarding: "/assets/images/onboarding-img.png",
     register: "/assets/images/register-img.png",
     appointment: "/assets/images/appointment-img.png",
-    calendar: "/assets/icons/calendar.svg"
+    calendar: "/assets/icons/calendar.svg",
+    close: "/assets/icons/close.svg",
+    appointments: "/assets/icons/appointments.svg",
+    pending: "/assets/icons/pending.svg",
+    cancelled: "/assets/icons/cancelled.svg",
+    arrow: "/assets/icons/arrow.svg",
   },
   gifs: {
     success: "/assets/gifs/success.gif",
