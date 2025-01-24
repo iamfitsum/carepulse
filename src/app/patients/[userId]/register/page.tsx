@@ -1,8 +1,8 @@
 import RegisterForm from "@/components/forms/RegisterForm";
-import { getPatient, getUser } from '@/lib/actions/patient.actions';
+import { getPatient, getUser } from "@/lib/actions/patient.actions";
 import appConfig from "@/lib/appConfig";
 import Image from "next/image";
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 import React from "react";
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {

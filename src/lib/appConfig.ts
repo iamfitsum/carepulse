@@ -9,8 +9,13 @@ const appConfig = {
     onboarding: "/assets/images/onboarding-img.png",
     register: "/assets/images/register-img.png",
     appointment: "/assets/images/appointment-img.png",
+    calendar: "/assets/icons/calendar.svg"
   },
-  copyright: () => `© ${new Date().getFullYear()} CarePulse. All rights reserved.`,
+  gifs: {
+    success: "/assets/gifs/success.gif",
+  },
+  copyright: () =>
+    `© ${new Date().getFullYear()} CarePulse. All rights reserved.`,
 };
 
 export default appConfig;

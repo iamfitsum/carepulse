@@ -24,9 +24,7 @@ const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
             patientId={patient.$id}
           />
 
-          <p className="justify-items-end text-dark-600 xl:text-left">
-            {appConfig.copyright()}
-          </p>
+          <p className="copyright py-12">{appConfig.copyright()}</p>
         </div>
       </section>
 

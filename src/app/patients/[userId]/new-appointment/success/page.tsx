@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Doctors } from "@/constants";
 import { getAppointment } from "@/lib/actions/appointment.actions";
 import { formatDateTime } from "@/lib/utils";
+import appConfig from "@/lib/appConfig";
 
 const RequestSuccess = async ({
   searchParams,
@@ -14,7 +15,7 @@ const RequestSuccess = async ({
   const appointment = await getAppointment(appointmentId);
 
   const doctor = Doctors.find(
-    (doctor) => doctor.name === appointment.primaryPhysician
+    (doctor) => doctor.name === appointment.primaryPhysician,
   );
 
   return (
@@ -22,7 +23,7 @@ const RequestSuccess = async ({
       <div className="success-img">
         <Link href="/">
           <Image
-            src="/assets/icons/logo-full.svg"
+            src={appConfig.logo.full}
             height={1000}
             width={1000}
             alt="logo"
@@ -32,7 +33,7 @@ const RequestSuccess = async ({
 
         <section className="flex flex-col items-center">
           <Image
-            src="/assets/gifs/success.gif"
+            src={appConfig.gifs.success}
             height={300}
             width={280}
             alt="success"
@@ -58,7 +59,7 @@ const RequestSuccess = async ({
           </div>
           <div className="flex gap-2">
             <Image
-              src="/assets/icons/calendar.svg"
+              src={appConfig.images.calendar}
               height={24}
               width={24}
               alt="calendar"
@@ -73,7 +74,7 @@ const RequestSuccess = async ({
           </Link>
         </Button>
 
-        <p className="copyright">© 2024 CarePluse</p>
+        <p className="copyright py-12">{appConfig.copyright()}</p>
       </div>
     </div>
   );
