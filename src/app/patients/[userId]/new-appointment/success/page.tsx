@@ -62,11 +62,9 @@ const RequestSuccess = async ({
             </div>
             <div className="flex items-center gap-2">
               <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
-              {doctor?.specialization && (
-                <span className="bg-green-100 text-green-800 text-12-semibold px-2 py-0.5 rounded-full">
-                  {doctor.specialization || "General Practice"}
-                </span>
-              )}
+              <span className="bg-green-100 text-green-800 text-12-semibold px-2 py-0.5 rounded-full">
+                {doctor.specialization || "General Practice"}
+              </span>
             </div>
           </div>
           <div className="flex gap-2">
