@@ -38,7 +38,7 @@ export const PatientFormValidation = z.object({
     .string()
     .refine(
       (emergencyContactNumber) => /^\+\d{10,15}$/.test(emergencyContactNumber),
-      "Invalid phone number"
+      "Invalid phone number",
     ),
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
   insuranceProvider: z
@@ -116,3 +116,27 @@ export function getAppointmentSchema(type: string) {
       return ScheduleAppointmentSchema;
   }
 }
+
+export const DoctorSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be at most 50 characters"),
+  specialization: z
+    .string()
+    .max(50, "Specialization must be at most 50 characters")
+    .optional(),
+  imageFile: z
+    .custom<File[]>()
+    .refine(
+      (files) => !files || files[0]?.size <= 2 * 1024 * 1024,
+      "File must be less than 2MB",
+    )
+    .refine(
+      (files) =>
+        !files ||
+        ["image/jpeg", "image/png", "image/webp"].includes(files[0]?.type),
+      "Only JPEG, PNG, and WEBP formats are supported",
+    )
+    .optional(),
+});

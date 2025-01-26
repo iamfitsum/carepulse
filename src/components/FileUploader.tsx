@@ -9,26 +9,34 @@ import { convertFileToUrl } from "@/lib/utils";
 type FileUploaderProps = {
   files: File[] | undefined;
   onChange: (files: File[]) => void;
+  doctorImageUrl?: string;
 };
 
-export const FileUploader = ({ files, onChange }: FileUploaderProps) => {
+export const FileUploader = ({
+  files,
+  doctorImageUrl,
+  onChange,
+}: FileUploaderProps) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     onChange(acceptedFiles);
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
+  const previewUrl = files?.[0] ? convertFileToUrl(files[0]) : doctorImageUrl;
+
   return (
     <div {...getRootProps()} className="file-upload">
       <input {...getInputProps()} />
-      {files && files?.length > 0 ? (
-        <Image
-          src={convertFileToUrl(files[0])}
-          width={1000}
-          height={1000}
-          alt="uploaded image"
-          className="max-h-[400px] overflow-hidden object-cover"
-        />
+      {previewUrl ? (
+        <div className="relative w-full h-40">
+          <Image
+            src={previewUrl}
+            fill
+            alt="uploaded image"
+            className="object-contain rounded-full border border-dark-300"
+          />
+        </div>
       ) : (
         <>
           <Image

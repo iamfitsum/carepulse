@@ -3,24 +3,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { SelectItem } from "@/components/ui/select";
-import { Doctors } from "@/constants";
 import {
   createAppointment,
   updateAppointment,
 } from "@/lib/actions/appointment.actions";
 import { getAppointmentSchema } from "@/lib/validation";
-import { Appointment } from "@/types/appwrite.types";
+import { Appointment, Doctor } from "@/types/appwrite.types";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { Form } from "../ui/form";
+import { getDoctors } from "@/lib/actions/doctor.actions";
 
 export const AppointmentForm = ({
   userId,
@@ -37,6 +37,15 @@ export const AppointmentForm = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      const doctorsData = await getDoctors();
+      setDoctors(doctorsData);
+    };
+    fetchDoctors();
+  }, []);
 
   const AppointmentFormValidation = getAppointmentSchema(type);
 
@@ -54,7 +63,7 @@ export const AppointmentForm = ({
   });
 
   const onSubmit = async (
-    values: z.infer<typeof AppointmentFormValidation>
+    values: z.infer<typeof AppointmentFormValidation>,
   ) => {
     setIsLoading(true);
 
@@ -87,7 +96,7 @@ export const AppointmentForm = ({
         if (newAppointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`,
           );
         }
       } else {
@@ -149,17 +158,23 @@ export const AppointmentForm = ({
               label="Doctor"
               placeholder="Select a doctor"
             >
-              {Doctors.map((doctor, i) => (
-                <SelectItem key={doctor.name + i} value={doctor.name}>
-                  <div className="flex cursor-pointer items-center gap-2">
-                    <Image
-                      src={doctor.image}
-                      width={32}
-                      height={32}
-                      alt="doctor"
-                      className="rounded-full border border-dark-500"
-                    />
-                    <p>{doctor.name}</p>
+              {doctors.map((doctor) => (
+                <SelectItem key={doctor.$id} value={doctor.name}>
+                  <div className="flex items-center justify-between w-full gap-2 cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <div className="relative size-8">
+                        <Image
+                          src={doctor.imageUrl || "/assets/images/default-doctor.png"}
+                          alt="doctor"
+                          fill
+                          className="rounded-full border border-dark-500 object-cover"
+                        />
+                      </div>
+                      <p className="text-14-medium">Dr. {doctor.name}</p>
+                    </div>
+                    <span className="bg-green-100 text-green-800 text-12-semibold px-2.5 py-0.5 rounded-full">
+                      {doctor.specialization || "General Practice"}
+                    </span>
                   </div>
                 </SelectItem>
               ))}

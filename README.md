@@ -5,7 +5,7 @@
 
 <br/>
 
-CarePulse is an advanced healthcare patient management application designed to simplify the process of registering, booking, and managing appointments with doctors. The system features robust administrative tools for scheduling, confirming, and canceling appointments, as well as sending SMS notifications to patients. Built with Next.js and powered by modern web technologies, CarePulse ensures seamless performance and a responsive design for all devices.
+**CarePulse** is an advanced healthcare patient management application designed to simplify the process of registering, booking, and managing appointments with doctors. The system features robust administrative tools for managing doctors, scheduling, confirming, and canceling appointments, as well as sending SMS notifications to patients regarding their appointment status. Built with Next.js and powered by modern web technologies, CarePulse ensures seamless performance and a responsive design for all devices.
 
 ---
 
@@ -24,7 +24,8 @@ CarePulse is an advanced healthcare patient management application designed to s
 
 - **Patient Registration:** Users can create their profiles to access the platform.
 - **Appointment Booking:** Patients can schedule appointments with doctors, including multiple bookings.
-- **Admin Tools:** Admins can view, manage, confirm, and cancel appointments efficiently.
+- **Doctor Management:** Admins can add, edit, and delete doctors to keep the platform up-to-date.
+- **Appointment Management:** Admins can view, manage, confirm, and cancel appointments efficiently.
 - **SMS Notifications:** Patients receive SMS confirmations for their appointments.
 - **File Uploads:** Users can securely upload and store files using Appwrite storage.
 - **Error Monitoring:** Integrated with Sentry to track performance and identify errors.
@@ -51,6 +52,7 @@ CarePulse is an advanced healthcare patient management application designed to s
 .
 ├── components.json
 ├── eslint.config.mjs
+├── LICENSE
 ├── next.config.ts
 ├── next-env.d.ts
 ├── package.json
@@ -84,9 +86,11 @@ CarePulse is an advanced healthcare patient management application designed to s
 │   ├── components
 │   │   ├── AppointmentModal.tsx
 │   │   ├── CustomFormField.tsx
+│   │   ├── DoctorModal.tsx
 │   │   ├── FileUploader.tsx
 │   │   ├── forms
 │   │   │   ├── AppointmentForm.tsx
+│   │   │   ├── DoctorForm.tsx
 │   │   │   ├── PatientForm.tsx
 │   │   │   └── RegisterForm.tsx
 │   │   ├── PasskeyModal.tsx
@@ -116,6 +120,7 @@ CarePulse is an advanced healthcare patient management application designed to s
 │   ├── lib
 │   │   ├── actions
 │   │   │   ├── appointment.actions.ts
+│   │   │   ├── doctor.actions.ts
 │   │   │   └── patient.actions.ts
 │   │   ├── appConfig.ts
 │   │   ├── appwrite.config.ts
@@ -167,6 +172,7 @@ API_KEY=
 DATABASE_ID=
 PATIENT_COLLECTION_ID=
 APPOINTMENT_COLLECTION_ID=
+DOCTOR_COLLECTION_ID=
 NEXT_PUBLIC_BUCKET_ID=
 
 #Sentry

@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SelectItem } from "@/components/ui/select";
 import {
-  Doctors,
   GenderOptions,
   IdentificationTypes,
   PatientFormDefaultValues,
@@ -25,10 +24,21 @@ import "react-phone-number-input/style.css";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import { FileUploader } from "../FileUploader";
 import SubmitButton from "../SubmitButton";
+import { Doctor } from "@/types/appwrite.types";
+import { getDoctors } from "@/lib/actions/doctor.actions";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      const doctorsData = await getDoctors();
+      setDoctors(doctorsData);
+    };
+    fetchDoctors();
+  }, []);
 
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
@@ -226,17 +236,23 @@ const RegisterForm = ({ user }: { user: User }) => {
             label="Primary care physician"
             placeholder="Select a physician"
           >
-            {Doctors.map((doctor, i) => (
-              <SelectItem key={doctor.name + i} value={doctor.name}>
-                <div className="flex cursor-pointer items-center gap-2">
-                  <Image
-                    src={doctor.image}
-                    width={32}
-                    height={32}
-                    alt="doctor"
-                    className="rounded-full border border-dark-500"
-                  />
-                  <p>{doctor.name}</p>
+            {doctors.map((doctor) => (
+              <SelectItem key={doctor.$id} value={doctor.name}>
+                <div className="flex items-center justify-between w-full gap-2 cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    <div className="relative size-8">
+                      <Image
+                        src={doctor.imageUrl || "/assets/images/default-doctor.png"}
+                        alt="doctor"
+                        fill
+                        className="rounded-full border border-dark-500 object-cover"
+                      />
+                    </div>
+                    <p className="text-14-medium">Dr. {doctor.name}</p>
+                  </div>
+                  <span className="bg-green-100 text-green-800 text-12-semibold px-2.5 py-0.5 rounded-full">
+                    {doctor.specialization || "General Practice"}
+                  </span>
                 </div>
               </SelectItem>
             ))}

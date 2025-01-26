@@ -5,10 +5,12 @@ import Image from "next/image";
 
 import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
-import { Appointment } from "@/types/appwrite.types";
+import { Appointment, Doctor } from "@/types/appwrite.types";
 
 import { AppointmentModal } from "../AppointmentModal";
 import { StatusBadge } from "../StatusBadge";
+import { useEffect, useState } from "react";
+import { getDoctors } from "@/lib/actions/doctor.actions";
 
 export const columns: ColumnDef<Appointment>[] = [
   {
@@ -54,23 +56,7 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Doctor",
     cell: ({ row }) => {
       const appointment = row.original;
-
-      const doctor = Doctors.find(
-        (doctor) => doctor.name === appointment.primaryPhysician,
-      );
-
-      return (
-        <div className="flex items-center gap-3">
-          <Image
-            src={doctor?.image!}
-            alt="doctor"
-            width={100}
-            height={100}
-            className="size-8"
-          />
-          <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
-        </div>
-      );
+      return <DoctorCell primaryPhysician={appointment.primaryPhysician} />;
     },
   },
   {
@@ -102,3 +88,39 @@ export const columns: ColumnDef<Appointment>[] = [
     },
   },
 ];
+
+const DoctorCell = ({ primaryPhysician }: { primaryPhysician: string }) => {
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      const doctorsData = await getDoctors();
+      setDoctors(doctorsData);
+    };
+    fetchDoctors();
+  }, []);
+
+  const doctor = doctors.find((doctor) => doctor.name === primaryPhysician);
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="relative size-8">
+        <Image
+          src={doctor?.imageUrl || "/assets/images/default-doctor.png"}
+          alt="doctor"
+          fill
+          className="rounded-full object-cover"
+        />
+      </div>
+      <div className="flex items-center gap-2">
+        <p className="whitespace-nowrap">
+          Dr. {doctor?.name || "Unknown Doctor"}
+        </p>
+
+        <span className="bg-green-100 text-green-800 text-12-semibold px-2 py-0.5 rounded-full">
+          {doctor?.specialization || "General Practice"}
+        </span>
+      </div>
+    </div>
+  );
+};

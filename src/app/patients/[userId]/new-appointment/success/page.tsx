@@ -2,20 +2,24 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { Doctors } from "@/constants";
 import { getAppointment } from "@/lib/actions/appointment.actions";
 import { formatDateTime } from "@/lib/utils";
 import appConfig from "@/lib/appConfig";
+import { getDoctors } from "@/lib/actions/doctor.actions";
+import { Doctor } from "@/types/appwrite.types";
 
 const RequestSuccess = async ({
   searchParams,
   params: { userId },
 }: SearchParamProps) => {
   const appointmentId = (searchParams?.appointmentId as string) || "";
-  const appointment = await getAppointment(appointmentId);
+  const [appointment, doctors] = await Promise.all([
+    getAppointment(appointmentId),
+    getDoctors(),
+  ]);
 
-  const doctor = Doctors.find(
-    (doctor) => doctor.name === appointment.primaryPhysician,
+  const doctor = doctors.find(
+    (doctor: Doctor) => doctor.name === appointment.primaryPhysician,
   );
 
   return (
@@ -48,14 +52,22 @@ const RequestSuccess = async ({
         <section className="request-details">
           <p>Requested appointment details: </p>
           <div className="flex items-center gap-3">
-            <Image
-              src={doctor?.image!}
-              alt="doctor"
-              width={100}
-              height={100}
-              className="size-6"
-            />
-            <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
+            <div className="relative size-6">
+              <Image
+                src={doctor?.imageUrl || "/assets/images/default-doctor.png"}
+                alt="doctor"
+                fill
+                className="rounded-full object-cover"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
+              {doctor?.specialization && (
+                <span className="bg-green-100 text-green-800 text-12-semibold px-2 py-0.5 rounded-full">
+                  {doctor.specialization || "General Practice"}
+                </span>
+              )}
+            </div>
           </div>
           <div className="flex gap-2">
             <Image
